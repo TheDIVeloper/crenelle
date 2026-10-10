@@ -35,26 +35,47 @@ extension View {
     }
 }
 
-/// Keeps the host `NSWindow` at `height`, holding the top edge fixed so the
+/// Subclass that guarantees the host NSWindow is resized whenever the view moves
+/// to a window or whenever the target height changes.
+final class WindowHeightAdjustingView: NSView {
+    var targetHeight: CGFloat = 0 {
+        didSet {
+            applyHeight()
+        }
+    }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        applyHeight()
+    }
+
+    func applyHeight() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self, let window = self.window, self.targetHeight > 0 else { return }
+            var frame = window.frame
+            guard abs(frame.height - self.targetHeight) > 0.5 else { return }
+            // Cocoa origin is bottom-left: shift the origin up by the height
+            // delta so the top edge stays put.
+            frame.origin.y += frame.height - self.targetHeight
+            frame.size.height = self.targetHeight
+            window.setFrame(frame, display: true)
+        }
+    }
+}
+
+/// Keeps the host NSWindow at height, holding the top edge fixed so the
 /// panel grows and shrinks downwards from the menu bar. SwiftUI animates the
 /// card itself; the window simply follows.
 struct WindowHeightAdjuster: NSViewRepresentable {
     var height: CGFloat
 
-    func makeNSView(context: Context) -> NSView {
-        NSView(frame: .zero)
+    func makeNSView(context: Context) -> WindowHeightAdjustingView {
+        let view = WindowHeightAdjustingView(frame: .zero)
+        view.targetHeight = height
+        return view
     }
 
-    func updateNSView(_ nsView: NSView, context: Context) {
-        DispatchQueue.main.async {
-            guard let window = nsView.window else { return }
-            var frame = window.frame
-            guard abs(frame.height - height) > 0.5 else { return }
-            // Cocoa origin is bottom-left: shift the origin up by the height
-            // delta so the top edge stays put.
-            frame.origin.y += frame.height - height
-            frame.size.height = height
-            window.setFrame(frame, display: true)
-        }
+    func updateNSView(_ nsView: WindowHeightAdjustingView, context: Context) {
+        nsView.targetHeight = height
     }
 }
