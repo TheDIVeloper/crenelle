@@ -8,7 +8,6 @@
 import AVFoundation
 import Defaults
 import KeyboardShortcuts
-import Sparkle
 import SwiftUI
 
 @MainActor
@@ -48,23 +47,11 @@ struct DynamicNotchApp: App {
     @Default(.menubarIcon) var showMenuBarIcon
     @Environment(\.openWindow) var openWindow
 
-    private let sparkleUpdaterDelegate: BoringSparkleUpdaterDelegate
-    let updaterController: SPUStandardUpdaterController
-
     init() {
         #if DEBUG
         OTPDetector.runSelfCheck()
         #endif
-        let sparkleUpdaterDelegate = BoringSparkleUpdaterDelegate()
-        self.sparkleUpdaterDelegate = sparkleUpdaterDelegate
-        updaterController = SPUStandardUpdaterController(
-            startingUpdater: false, updaterDelegate: sparkleUpdaterDelegate, userDriverDelegate: nil)
-        SoftwareUpdateStore.updater = updaterController.updater
 
-        // Initialize the settings window controller with the updater controller
-        SettingsWindowController.shared.setUpdaterController(updaterController)
-
-        let updaterController = self.updaterController
         Task { @MainActor in
             let sourceURL = Bundle.main.bundleURL
             if let destinationURL = LegacyAppBundleMigration.destinationURL(for: sourceURL) {
@@ -80,7 +67,6 @@ struct DynamicNotchApp: App {
                 }
                 NSLog("Failed to migrate legacy Crenelle app bundle at %@", sourceURL.path)
             }
-            updaterController.startUpdater()
         }
     }
 
@@ -92,7 +78,11 @@ struct DynamicNotchApp: App {
                 }
             }
             .keyboardShortcut(KeyEquivalent(","), modifiers: .command)
-            CheckForUpdatesView(updater: updaterController.updater)
+            Button("Check for Updates…") {
+                if let url = URL(string: "https://github.com/TheDIVeloper/crenelle/releases") {
+                    NSWorkspace.shared.open(url)
+                }
+            }
             Button("Restart Crenelle") {
                 ApplicationRelauncher.restart()
             }
@@ -101,26 +91,6 @@ struct DynamicNotchApp: App {
             }
             .keyboardShortcut(KeyEquivalent("Q"), modifiers: .command)
         }
-    }
-}
-
-@MainActor
-enum SoftwareUpdateStore {
-    static var updater: SPUUpdater?
-}
-
-@MainActor
-final class BoringSparkleUpdaterDelegate: NSObject, SPUUpdaterDelegate {
-    func updaterShouldPromptForPermissionToCheck(forUpdates updater: SPUUpdater) -> Bool {
-        false
-    }
-
-    @objc func feedURLString(for updater: SPUUpdater) -> String? {
-        Defaults[.updateChannel].feedURLString
-    }
-
-    @objc func allowedChannels(for updater: SPUUpdater) -> Set<String> {
-        Defaults[.updateChannel].allowedSparkleChannels
     }
 }
 
@@ -451,7 +421,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             window.contentView = NSHostingView(
                 rootView: OnboardingView(
                     step: step,
-                    updater: SoftwareUpdateStore.updater,
                     onFinish: {
                         window.orderOut(nil)
 //                        NSApp.setActivationPolicy(.accessory)

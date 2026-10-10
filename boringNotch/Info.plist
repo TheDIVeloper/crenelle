@@ -4,24 +4,10 @@
 <dict>
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
-	<key>SUBundleName</key>
-	<string>Crenelle</string>
-	<key>SUEnableAutomaticChecks</key>
-	<false/>
 	<key>NSAudioCaptureUsageDescription</key>
 	<string>crenelle analyzes audio from your music app to draw a real-time waveform in the notch. Audio is processed locally and never leaves your Mac.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Crenelle uses your location to show local weather in the notch. Your coordinates are only sent to the weather service to fetch the forecast.</string>
-	<key>BNUpdateChannel</key>
-	<string>stable</string>
-	<key>SUEnableDownloaderService</key>
-	<true/>
-	<key>SUEnableInstallerLauncherService</key>
-	<true/>
-	<key>SUFeedURL</key>
-	<string>https://TheDIVeloper.github.io/crenelle/appcast.xml</string>
-	<key>SUPublicEDKey</key>
-	<string>B1Y47t8C/v8ImurYA+9arEsuCrpxwJSviekiflMElbI=</string>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
 		<dict/>

@@ -6,12 +6,10 @@
 //
 
 import Defaults
-import Sparkle
 import SwiftUI
 
 struct AboutView: View {
     @State private var showBuildNumber: Bool = false
-    let updaterController: SPUStandardUpdaterController
     @Environment(\.openWindow) var openWindow
 
     /// The exact version this build reports, in the format the bug report
@@ -19,9 +17,7 @@ struct AboutView: View {
     private var reportVersion: String {
         let version = Bundle.main.releaseVersionNumber ?? "unknown"
         let build = Bundle.main.buildVersionNumber ?? "unknown"
-        let channel = UpdateChannel.bundled
-        let channelSuffix = channel == .stable ? "" : ", \(channel.rawValue) channel"
-        return "\(version) (build \(build)\(channelSuffix))"
+        return "\(version) (build \(build))"
     }
 
     /// Opens the bug report form with the version fields prefilled via the
@@ -69,7 +65,15 @@ struct AboutView: View {
                     Text("Version info")
                 }
 
-                UpdaterSettingsView(updater: updaterController.updater)
+                Section {
+                    Button("Check for Updates…") {
+                        openReleases()
+                    }
+                } header: {
+                    Text("Software updates")
+                } footer: {
+                    Text("Crenelle checks for updates manually. Releases are published on GitHub.")
+                }
 
                 HStack(spacing: 30) {
                     Spacer(minLength: 0)
@@ -118,8 +122,16 @@ struct AboutView: View {
             .frame(maxWidth: .infinity, alignment: .center)
         }
         .toolbar {
-            CheckForUpdatesView(updater: updaterController.updater)
+            Button("Check for Updates…") {
+                openReleases()
+            }
         }
         .navigationTitle("About")
+    }
+
+    private func openReleases() {
+        if let url = URL(string: "https://github.com/TheDIVeloper/crenelle/releases") {
+            NSWorkspace.shared.open(url)
+        }
     }
 }
