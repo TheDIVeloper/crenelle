@@ -190,10 +190,12 @@ struct ContentView: View {
             ClipboardView()
         case .timer:
             TimerView()
+        case .weather:
+            WeatherView()
         // Remaining tools are not shipped yet, so their tabs stay disabled and
         // these branches are unreachable from the tab bar. Each one gets its
         // real view here as it lands.
-        case .weather, .sound, .disk, .performance, .network, .caffeinate:
+        case .sound, .disk, .performance, .network, .caffeinate:
             EmptyView()
         }
     }
