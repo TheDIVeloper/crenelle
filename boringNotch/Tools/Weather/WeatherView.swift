@@ -61,68 +61,183 @@ struct WeatherView: View {
     }
 
     private func ready(_ snapshot: WeatherSnapshot) -> some View {
-        VStack(spacing: 14) {
-            HStack(spacing: 14) {
-                Image(systemName: WeatherCode.symbol(for: snapshot.weatherCode, isDay: snapshot.isDay))
-                    .font(.system(size: 48))
-                    .symbolRenderingMode(.multicolor)
-                    .frame(width: 56)
+        VStack(spacing: 12) {
+            HStack(alignment: .top, spacing: 14) {
+                heroCard(snapshot)
+                    .frame(width: 220)
 
-                VStack(alignment: .leading, spacing: 2) {
+                metricGrid(snapshot)
+            }
+
+            footer(snapshot)
+        }
+    }
+
+    private func heroCard(_ snapshot: WeatherSnapshot) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 12) {
+                Image(systemName: WeatherCode.symbol(for: snapshot.weatherCode, isDay: snapshot.isDay))
+                    .font(.system(size: 40))
+                    .symbolRenderingMode(.multicolor)
+                    .frame(width: 44, height: 44)
+
+                VStack(alignment: .leading, spacing: 1) {
                     Text("\(unit.temperature(snapshot.temperature))°")
-                        .font(.system(size: 44, weight: .semibold, design: .rounded))
+                        .font(.system(size: 36, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
                         .contentTransition(.numericText())
+
                     Text(WeatherCode.description(for: snapshot.weatherCode))
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                    if let place = manager.placeName {
-                        Text(place)
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
+                        .font(.subheadline)
+                        .foregroundStyle(.white.opacity(0.85))
+                        .lineLimit(1)
                 }
-                Spacer(minLength: 8)
-                detailColumn(snapshot)
             }
 
-            HStack(spacing: 10) {
-                unitPicker
-                Spacer()
-                Button {
-                    manager.refresh(force: true)
-                } label: {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.system(size: 12, weight: .semibold))
+            if let place = manager.placeName {
+                HStack(spacing: 4) {
+                    Image(systemName: "mappin.and.ellipse")
+                        .font(.caption2)
+                    Text(place)
+                        .font(.caption)
                 }
-                .buttonStyle(.plain)
                 .foregroundStyle(.secondary)
-                Text("Updated \(snapshot.fetchedAt.formatted(.relative(presentation: .named)))")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                .lineLimit(1)
             }
+
+            unitPicker
+                .padding(.top, 2)
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.04))
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
         }
     }
 
-    private func detailColumn(_ snapshot: WeatherSnapshot) -> some View {
-        VStack(alignment: .trailing, spacing: 6) {
-            detail("arrow.up", "\(unit.temperature(snapshot.high))°")
-            detail("arrow.down", "\(unit.temperature(snapshot.low))°")
-            detail("humidity.fill", "\(Int(snapshot.humidity.rounded()))%")
-            detail("wind", "\(unit.wind(snapshot.windSpeed)) \(unit.windUnit)")
+    private func metricGrid(_ snapshot: WeatherSnapshot) -> some View {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+            metricTile(
+                icon: "thermometer.medium",
+                title: "FEELS LIKE",
+                value: "\(unit.temperature(snapshot.apparentTemperature))°",
+                subtitle: apparentSubtitle(snapshot)
+            )
+
+            metricTile(
+                icon: "arrow.up.and.down",
+                title: "HIGH / LOW",
+                value: "↑ \(unit.temperature(snapshot.high))°  ↓ \(unit.temperature(snapshot.low))°",
+                subtitle: "Daily range"
+            )
+
+            metricTile(
+                icon: "humidity.fill",
+                title: "HUMIDITY",
+                value: "\(Int(snapshot.humidity.rounded()))%",
+                subtitle: humiditySubtitle(snapshot.humidity)
+            )
+
+            metricTile(
+                icon: "wind",
+                title: "WIND",
+                value: "\(unit.wind(snapshot.windSpeed)) \(unit.windUnit)",
+                subtitle: windSubtitle(snapshot.windSpeed)
+            )
         }
     }
 
-    private func detail(_ symbol: String, _ value: String) -> some View {
-        HStack(spacing: 6) {
-            Image(systemName: symbol)
-                .font(.system(size: 11))
-                .foregroundStyle(.secondary)
-                .frame(width: 14)
+    private func metricTile(
+        icon: String,
+        title: String,
+        value: String,
+        subtitle: String
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 5) {
+                Image(systemName: icon)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                Text(title)
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(.secondary)
+            }
+
             Text(value)
-                .font(.callout.monospacedDigit())
+                .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundStyle(.white)
+                .lineLimit(1)
+
+            Text(subtitle)
+                .font(.system(size: 10))
+                .foregroundStyle(.tertiary)
+                .lineLimit(1)
         }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 10)
+                .fill(Color.white.opacity(0.04))
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        }
+    }
+
+    private func apparentSubtitle(_ snapshot: WeatherSnapshot) -> String {
+        let diff = abs(snapshot.apparentTemperature - snapshot.temperature)
+        if diff < 1.5 {
+            return "Similar to actual"
+        } else if snapshot.apparentTemperature < snapshot.temperature {
+            return "Feels cooler"
+        } else {
+            return "Feels warmer"
+        }
+    }
+
+    private func humiditySubtitle(_ humidity: Double) -> String {
+        if humidity >= 70 {
+            return "High humidity"
+        } else if humidity <= 30 {
+            return "Dry air"
+        } else {
+            return "Comfortable"
+        }
+    }
+
+    private func windSubtitle(_ speed: Double) -> String {
+        if speed < 12 {
+            return "Gentle breeze"
+        } else if speed < 28 {
+            return "Moderate breeze"
+        } else {
+            return "Strong wind"
+        }
+    }
+
+    private func footer(_ snapshot: WeatherSnapshot) -> some View {
+        HStack(spacing: 6) {
+            Spacer()
+            Button {
+                manager.refresh(force: true)
+            } label: {
+                Image(systemName: "arrow.clockwise")
+                    .font(.system(size: 11, weight: .medium))
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(.secondary)
+            Text("Updated \(snapshot.fetchedAt.formatted(.relative(presentation: .named)))")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+        }
+        .padding(.horizontal, 4)
     }
 
     private var unitPicker: some View {
@@ -133,7 +248,7 @@ struct WeatherView: View {
         }
         .pickerStyle(.segmented)
         .labelsHidden()
-        .frame(width: 108)
+        .frame(width: 96)
     }
 
     private func message(
