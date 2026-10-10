@@ -24,7 +24,7 @@ struct WelcomeView: View {
                         .resizable().scaledToFit()
                         .frame(width: 100, height: 100)
                         .padding(.bottom, 8)
-                    Text("Boring Notch")
+                    Text("Crenelle")
                         .font(.system(.largeTitle, design: .default))
                         .fontWeight(.semibold)
                     Text("Welcome")
@@ -59,13 +59,7 @@ struct WelcomeView: View {
                 .padding(.top)
             }
 
-            Image("theboringteam")
-                .resizable().scaledToFit()
-                .frame(height: 22)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                .padding()
-                .padding(.bottom, 36)
-                .blendMode(.overlay)
+
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .ignoresSafeArea()

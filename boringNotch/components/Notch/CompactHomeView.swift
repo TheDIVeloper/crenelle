@@ -6,7 +6,7 @@
 //  title, scrubber, transport — with no tab bar, calendar or mirror.
 //
 //  Layout and proportions follow Atoll's MinimalisticMusicPlayerView
-//  (https://github.com/Ebullioscopic/Atoll, GPL-3.0, itself a boring.notch
+//  (https://github.com/Ebullioscopic/Atoll, GPL-3.0, itself a crenelle
 //  fork): 50pt album art, 12/10pt title and artist, a fixed-width
 //  visualizer block on the right sized to match the trailing time label so
 //  the bars centre over it, a progress row, and a transport row.

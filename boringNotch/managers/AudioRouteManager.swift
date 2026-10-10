@@ -6,7 +6,7 @@
 //  between them, for the compact player's media-output button.
 //
 //  Adapted from Atoll's AudioRouteManager
-//  (https://github.com/Ebullioscopic/Atoll, GPL-3.0, itself a boring.notch
+//  (https://github.com/Ebullioscopic/Atoll, GPL-3.0, itself a crenelle
 //  fork).
 //
 //  Distinct from AudioOutputRouteResolver, which only classifies the

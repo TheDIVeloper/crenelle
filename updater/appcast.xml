@@ -4,7 +4,7 @@
         <item>
             <title>2.8-rc.1</title>
             <pubDate>Fri, 25 Sep 2026 09:34:13 +0000</pubDate>
-            <link>https://github.com/TheBoredTeam/boring.notch/releases</link>
+            <link>https://github.com/TheDIVeloper/crenelle/releases</link>
             <sparkle:channel>beta</sparkle:channel>
             <sparkle:version>282</sparkle:version>
             <sparkle:shortVersionString>2.8-rc.1</sparkle:shortVersionString>
@@ -123,7 +123,7 @@
 &lt;p&gt;Thank you to everyone who contributed code, translations, testing, bug reports, and feedback to this release!&lt;/p&gt;
 
 &lt;h3&gt;📄 Full Changelog&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/compare/v2.7.3...v2.8-rc.0"&gt;Compare v2.7.3 → v2.8-rc.0&lt;/a&gt;&lt;/p&gt; --&gt;
+&lt;p&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/compare/v2.7.3...v2.8-rc.0"&gt;Compare v2.7.3 → v2.8-rc.0&lt;/a&gt;&lt;/p&gt; --&gt;
 
 &lt;h2&gt;🛠️ Fixes &amp;amp; Improvements&lt;/h2&gt;
 &lt;ul&gt;
@@ -131,7 +131,7 @@
     &lt;li&gt;Fixed mirror sizing and alignment&lt;/li&gt;
     &lt;li&gt;Fixed UI bugs with notifications&lt;/li&gt;
     &lt;li&gt;Fixed Audio output selector hover broken and improved design &lt;/li&gt;
-    &lt;li&gt;Renamed boringNotch to Boring Notch&lt;/li&gt;
+    &lt;li&gt;Renamed boringNotch to Crenelle&lt;/li&gt;
     &lt;li&gt;Updated dependencies used by the project.&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -142,13 +142,13 @@
 &lt;p&gt;Thank you to everyone who contributed code, translations, testing, bug reports, and feedback to this release!&lt;/p&gt;
 
 &lt;h3&gt;📄 Full Changelog&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/compare/v2.8-rc.0...v2.8-rc.1"&gt;Compare v2.8-rc.0 → v2.8-rc.1&lt;/p&gt;</description>
-            <enclosure url="https://github.com/TheBoredTeam/boring.notch/releases/download/v2.8-rc.1/boringNotch.dmg" length="10629350" type="application/octet-stream" sparkle:edSignature="Y+9JNs6D8eMWRjGQ73wzr0W1rbpNCNtyYV0g2NrUSfszuCdbG4VVmZACg/wHkV+tupIXvj5mcdpPKvA5HWjtCQ==" />
+&lt;p&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/compare/v2.8-rc.0...v2.8-rc.1"&gt;Compare v2.8-rc.0 → v2.8-rc.1&lt;/p&gt;</description>
+            <enclosure url="https://github.com/TheDIVeloper/crenelle/releases/download/v2.8-rc.1/boringNotch.dmg" length="10629350" type="application/octet-stream" sparkle:edSignature="Y+9JNs6D8eMWRjGQ73wzr0W1rbpNCNtyYV0g2NrUSfszuCdbG4VVmZACg/wHkV+tupIXvj5mcdpPKvA5HWjtCQ==" />
         </item>
         <item>
             <title>2.7.3</title>
             <pubDate>Mon, 24 Nov 2025 08:07:37 +0000</pubDate>
-            <link>https://github.com/TheBoredTeam/boring.notch/releases</link>
+            <link>https://github.com/TheDIVeloper/crenelle/releases</link>
             <sparkle:version>271</sparkle:version>
             <sparkle:shortVersionString>2.7.3</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
@@ -241,13 +241,13 @@
     @EnesCinr · @lambegraham&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3&gt;📄 Full Changelog&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/compare/v2.7-rc.3...v2.7"&gt;Compare v2.7-rc.3 → v2.7&lt;/a&gt;&lt;/p&gt;</description>
-            <enclosure url="https://github.com/TheBoredTeam/boring.notch/releases/download/v2.7.3/boringNotch.dmg" length="9727030" type="application/octet-stream" sparkle:edSignature="gl1LSheePaR/h57sppaFMnIPGyX2AC3jITvMZzmYc95wiuuDAKLdSSjKAiUqDSvHqW8hx/fgCbS7878yUH3JCQ==" />
+&lt;p&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/compare/v2.7-rc.3...v2.7"&gt;Compare v2.7-rc.3 → v2.7&lt;/a&gt;&lt;/p&gt;</description>
+            <enclosure url="https://github.com/TheDIVeloper/crenelle/releases/download/v2.7.3/boringNotch.dmg" length="9727030" type="application/octet-stream" sparkle:edSignature="gl1LSheePaR/h57sppaFMnIPGyX2AC3jITvMZzmYc95wiuuDAKLdSSjKAiUqDSvHqW8hx/fgCbS7878yUH3JCQ==" />
         </item>
         <item>
             <title>2.7.2</title>
             <pubDate>Sat, 22 Nov 2025 22:40:29 +0000</pubDate>
-            <link>https://github.com/TheBoredTeam/boring.notch/releases</link>
+            <link>https://github.com/TheDIVeloper/crenelle/releases</link>
             <sparkle:version>262</sparkle:version>
             <sparkle:shortVersionString>2.7.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
@@ -263,7 +263,7 @@
     &lt;li&gt;&lt;strong&gt;Improved animations&lt;/strong&gt;&lt;/li&gt;
      &lt;li&gt;&lt;strong&gt;Fixed shadow clipping&lt;/strong&gt;&lt;/li&gt;
      &lt;h3&gt;📄 Full Changelog&lt;/h3&gt;
-      &lt;p&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/compare/v2.7...v2.7.1"&gt;Compare v2.7 → v2.7.1&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/compare/v2.7...v2.7.1"&gt;Compare v2.7 → v2.7.1&lt;/a&gt;&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;h2&gt;🚀 v2.7 — Flying Rabbit 🐇🪽&lt;/h2&gt;
@@ -342,13 +342,13 @@
     @EnesCinr · @lambegraham&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3&gt;📄 Full Changelog&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/compare/v2.7-rc.3...v2.7"&gt;Compare v2.7-rc.3 → v2.7&lt;/a&gt;&lt;/p&gt;</description>
-            <enclosure url="https://github.com/TheBoredTeam/boring.notch/releases/download/v2.7.2/boringNotch.dmg" length="9684618" type="application/octet-stream" sparkle:edSignature="8fWrEF4oezQcnF/iM9X0B4bGIe4zPnJSzpEuwq3OfyZ5TphlXf85DmRL21PWDIYuUIGuX6DaUyzv7NOB9Fk9Cg==" />
+&lt;p&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/compare/v2.7-rc.3...v2.7"&gt;Compare v2.7-rc.3 → v2.7&lt;/a&gt;&lt;/p&gt;</description>
+            <enclosure url="https://github.com/TheDIVeloper/crenelle/releases/download/v2.7.2/boringNotch.dmg" length="9684618" type="application/octet-stream" sparkle:edSignature="8fWrEF4oezQcnF/iM9X0B4bGIe4zPnJSzpEuwq3OfyZ5TphlXf85DmRL21PWDIYuUIGuX6DaUyzv7NOB9Fk9Cg==" />
         </item>
         <item>
             <title>2.7.1</title>
             <pubDate>Sat, 22 Nov 2025 22:14:41 +0000</pubDate>
-            <link>https://github.com/TheBoredTeam/boring.notch/releases</link>
+            <link>https://github.com/TheDIVeloper/crenelle/releases</link>
             <sparkle:version>260</sparkle:version>
             <sparkle:shortVersionString>2.7.1</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
@@ -359,7 +359,7 @@
     &lt;li&gt;&lt;strong&gt;Improved animations&lt;/strong&gt;&lt;/li&gt;
      &lt;li&gt;&lt;strong&gt;Fixed shadow clipping&lt;/strong&gt;&lt;/li&gt;
      &lt;h3&gt;📄 Full Changelog&lt;/h3&gt;
-      &lt;p&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/compare/v2.7...v2.7.1"&gt;Compare v2.7 → v2.7.1&lt;/a&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/compare/v2.7...v2.7.1"&gt;Compare v2.7 → v2.7.1&lt;/a&gt;&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;h2&gt;🚀 v2.7 — Flying Rabbit 🐇🪽&lt;/h2&gt;
@@ -438,8 +438,8 @@
     @EnesCinr · @lambegraham&lt;/p&gt;
 &lt;hr&gt;
 &lt;h3&gt;📄 Full Changelog&lt;/h3&gt;
-&lt;p&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/compare/v2.7-rc.3...v2.7"&gt;Compare v2.7-rc.3 → v2.7&lt;/a&gt;&lt;/p&gt;</description>
-            <enclosure url="https://github.com/TheBoredTeam/boring.notch/releases/download/v2.7.1/boringNotch.dmg" length="9684624" type="application/octet-stream" sparkle:edSignature="d+5NbhE7/CjLdcwOyPmxKSC7r3BAFG1Fe6t9voGwT/w6yUfaTMn6d30pUFhPqWihWFhT4cwtPOPztzEV35XBAQ==" />
+&lt;p&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/compare/v2.7-rc.3...v2.7"&gt;Compare v2.7-rc.3 → v2.7&lt;/a&gt;&lt;/p&gt;</description>
+            <enclosure url="https://github.com/TheDIVeloper/crenelle/releases/download/v2.7.1/boringNotch.dmg" length="9684624" type="application/octet-stream" sparkle:edSignature="d+5NbhE7/CjLdcwOyPmxKSC7r3BAFG1Fe6t9voGwT/w6yUfaTMn6d30pUFhPqWihWFhT4cwtPOPztzEV35XBAQ==" />
         </item>
         <item>
             <title>2.7-rc.1 Flying Rabbit 🐇🪽</title>
@@ -449,7 +449,7 @@
             <sparkle:minimumSystemVersion>14.2</sparkle:minimumSystemVersion>
             <description>
                     &lt;div&gt;
-                        &lt;h1&gt;🐇 boring.notch v2.7 – Flying Rabbit RC 1&lt;/h1&gt;
+                        &lt;h1&gt;🐇 crenelle v2.7 – Flying Rabbit RC 1&lt;/h1&gt;
                         &lt;p&gt;Release Candidate - July 27, 2025&lt;/p&gt;
                             &lt;h2&gt;✨ What's New &amp; Improved&lt;/h2&gt;
                             &lt;ul&gt;
@@ -471,7 +471,7 @@
                         &lt;p&gt;— The Boring Team&lt;/p&gt;
                     &lt;/div&gt;
                 </description>
-            <enclosure url="https://github.com/TheBoredTeam/boring.notch/releases/download/v2.7-rc.1/Flying_Rabbit.dmg" length="9033202" type="application/octet-stream" sparkle:edSignature="z1SbQHDCg1D+6m811f4ubdinUiXvoYF4Ra2xlzS3NSAlUqmmIpdzCp1MHMv5J9ddlxTws3rG48OCJfZRAXHHAw==" />
+            <enclosure url="https://github.com/TheDIVeloper/crenelle/releases/download/v2.7-rc.1/Flying_Rabbit.dmg" length="9033202" type="application/octet-stream" sparkle:edSignature="z1SbQHDCg1D+6m811f4ubdinUiXvoYF4Ra2xlzS3NSAlUqmmIpdzCp1MHMv5J9ddlxTws3rG48OCJfZRAXHHAw==" />
         </item>
         <item>
             <title>2.7-rc.0 Flying Rabbit 🐇🪽</title>
@@ -480,8 +480,8 @@
             <sparkle:shortVersionString>2.7-rc.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.2</sparkle:minimumSystemVersion>
             <description>
-                    &lt;h1 id="-release-v2-7-flying-rabbit-rc-0-boring-notch"&gt;🎉 Release v2.7 Flying Rabbit RC 0 — Boring Notch&lt;/h1&gt;
-                    &lt;p&gt;We're thrilled to announce &lt;strong&gt;Boring Notch v2.7: Flying Rabbit RC 0&lt;/strong&gt;, packed with powerful new features, polish, and community contributions!&lt;/p&gt;
+                    &lt;h1 id="-release-v2-7-flying-rabbit-rc-0-boring-notch"&gt;🎉 Release v2.7 Flying Rabbit RC 0 — Crenelle&lt;/h1&gt;
+                    &lt;p&gt;We're thrilled to announce &lt;strong&gt;Crenelle v2.7: Flying Rabbit RC 0&lt;/strong&gt;, packed with powerful new features, polish, and community contributions!&lt;/p&gt;
                     &lt;h2 id="-highlights"&gt;🚀 Highlights&lt;/h2&gt;
                     &lt;ul&gt;
                     &lt;li&gt;&lt;strong&gt;🔋 Enhanced Battery Status \&amp;amp; Charging Experience&lt;/strong&gt;
@@ -491,52 +491,52 @@
                     &lt;li&gt;Interactive battery icon with detailed info and instant System Preferences access&lt;/li&gt;
                     &lt;li&gt;Visual alignment and consistent styling (macOS-like bolt/plug icons, dark mode, etc.)&lt;/li&gt;
                     &lt;li&gt;Optimized and documented code, robust error handling, and improved performance&lt;/li&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/437"&gt;Details \&amp;amp; Demo&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/437"&gt;Details \&amp;amp; Demo&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;🖥️ Fullscreen Detection \&amp;amp; Playback Management Fixes&lt;/strong&gt;
                     @Alexander5015 improved reliability of media controls during fullscreen transitions&lt;ul&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/449"&gt;PR #449&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/449"&gt;PR #449&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;🦷 Allow 0 Height Notch&lt;/strong&gt;
                     Now supports notches with zero height for enhanced layout flexibility&lt;ul&gt;
-                    &lt;li&gt;Thanks, @yaxarat! &lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/397"&gt;PR #397&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;Thanks, @yaxarat! &lt;a href="https://github.com/TheDIVeloper/crenelle/pull/397"&gt;PR #397&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;🎛️ Multiple Media Controllers&lt;/strong&gt;
                     Control and display several media controllers at once&lt;ul&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/460"&gt;PR #460&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/460"&gt;PR #460&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;👀 Sneak Peek \&amp;amp; Jiggle Fixes&lt;/strong&gt;
                     Re-added sneak peek and improved animation stability&lt;ul&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/409"&gt;PR #409&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/409"&gt;PR #409&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;🗓️ New Calendar Service&lt;/strong&gt;
-                    Seamlessly integrates your calendar into Boring Notch&lt;ul&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/589"&gt;PR #589&lt;/a&gt;&lt;/li&gt;
+                    Seamlessly integrates your calendar into Crenelle&lt;ul&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/589"&gt;PR #589&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;📄 Updated LICENSE&lt;/strong&gt;
                     Keeping compliance and clarity up to date&lt;ul&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/590"&gt;PR #590&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/590"&gt;PR #590&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;🆕 Onboarding \&amp;amp; Better Settings Window&lt;/strong&gt;
                     Streamlined onboarding and redesigned settings for easy configuration&lt;ul&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/600"&gt;PR #600&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/600"&gt;PR #600&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;📸 Camera Toggle Feature&lt;/strong&gt;
                     New camera quick toggle, privacy-first!&lt;ul&gt;
-                    &lt;li&gt;Added by @Steve-sy &lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/598"&gt;PR #598&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;Added by @Steve-sy &lt;a href="https://github.com/TheDIVeloper/crenelle/pull/598"&gt;PR #598&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;li&gt;&lt;strong&gt;🎵 MediaRemote Adapter Support&lt;/strong&gt;
                     Improved compatibility with MediaRemote devices&lt;ul&gt;
-                    &lt;li&gt;&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/631"&gt;PR #631&lt;/a&gt;&lt;/li&gt;
+                    &lt;li&gt;&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/631"&gt;PR #631&lt;/a&gt;&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;/li&gt;
                     &lt;/ul&gt;
@@ -551,47 +551,47 @@
                     &lt;tbody&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@sancho1952007&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/431"&gt;https://github.com/TheBoredTeam/boring.notch/pull/431&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/431"&gt;https://github.com/TheDIVeloper/crenelle/pull/431&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@Ein-Tim&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/405"&gt;https://github.com/TheBoredTeam/boring.notch/pull/405&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/405"&gt;https://github.com/TheDIVeloper/crenelle/pull/405&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@AlexLemus-Dev&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/437"&gt;https://github.com/TheBoredTeam/boring.notch/pull/437&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/437"&gt;https://github.com/TheDIVeloper/crenelle/pull/437&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@yaxarat&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/397"&gt;https://github.com/TheBoredTeam/boring.notch/pull/397&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/397"&gt;https://github.com/TheDIVeloper/crenelle/pull/397&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@ShirakawaMio&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/399"&gt;https://github.com/TheBoredTeam/boring.notch/pull/399&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/399"&gt;https://github.com/TheDIVeloper/crenelle/pull/399&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@divyanshu0469&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/454"&gt;https://github.com/TheBoredTeam/boring.notch/pull/454&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/454"&gt;https://github.com/TheDIVeloper/crenelle/pull/454&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@oorischubert&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/409"&gt;https://github.com/TheBoredTeam/boring.notch/pull/409&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/409"&gt;https://github.com/TheDIVeloper/crenelle/pull/409&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@Al3Gr&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/493"&gt;https://github.com/TheBoredTeam/boring.notch/pull/493&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/493"&gt;https://github.com/TheDIVeloper/crenelle/pull/493&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@ChemicalChaos-Fabian42&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/509"&gt;https://github.com/TheBoredTeam/boring.notch/pull/509&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/509"&gt;https://github.com/TheDIVeloper/crenelle/pull/509&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@Davetheword&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/501"&gt;https://github.com/TheBoredTeam/boring.notch/pull/501&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/501"&gt;https://github.com/TheDIVeloper/crenelle/pull/501&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;tr&gt;
                     &lt;td style="text-align:left"&gt;@Steve-sy&lt;/td&gt;
-                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheBoredTeam/boring.notch/pull/598"&gt;https://github.com/TheBoredTeam/boring.notch/pull/598&lt;/a&gt;)&lt;/td&gt;
+                    &lt;td style="text-align:left"&gt;(&lt;a href="https://github.com/TheDIVeloper/crenelle/pull/598"&gt;https://github.com/TheDIVeloper/crenelle/pull/598&lt;/a&gt;)&lt;/td&gt;
                     &lt;/tr&gt;
                     &lt;/tbody&gt;
                     &lt;/table&gt;
@@ -602,10 +602,10 @@
                     &lt;li&gt;Optimizations for consistent performance across all system conditions&lt;/li&gt;
                     &lt;/ul&gt;
                     &lt;p&gt;Thank you 🌟 to everyone—new and returning—for their effort in making this release feature-rich, steady, and super fun!&lt;/p&gt;
-                    &lt;p&gt;&lt;strong&gt;Try Boring Notch v2.7 — Flying Rabbit RC 0 and let us know what you think!&lt;/strong&gt;&lt;/p&gt;
-                    &lt;p&gt;&lt;em&gt;— The Boring Notch Team&lt;/em&gt;&lt;/p&gt;
+                    &lt;p&gt;&lt;strong&gt;Try Crenelle v2.7 — Flying Rabbit RC 0 and let us know what you think!&lt;/strong&gt;&lt;/p&gt;
+                    &lt;p&gt;&lt;em&gt;— The Crenelle Team&lt;/em&gt;&lt;/p&gt;
                 </description>
-            <enclosure url="https://github.com/TheBoredTeam/boring.notch/releases/download/v2.7-rc.0/Flying_Rabbit.dmg" length="9000118" type="application/octet-stream" sparkle:edSignature="G5D2zsLFBR0Ua9b1EkLD8jjdkpMA10P1C9KmEL2Drg1WNwCnNAY+lGmljx1UQ+qDyqpjjMrOoGClevHd/276BQ==" />
+            <enclosure url="https://github.com/TheDIVeloper/crenelle/releases/download/v2.7-rc.0/Flying_Rabbit.dmg" length="9000118" type="application/octet-stream" sparkle:edSignature="G5D2zsLFBR0Ua9b1EkLD8jjdkpMA10P1C9KmEL2Drg1WNwCnNAY+lGmljx1UQ+qDyqpjjMrOoGClevHd/276BQ==" />
         </item>
         <item>
             <title>2.6 🎉 Wolf Painting 🐺</title>
@@ -616,7 +616,7 @@
             <description>
                 &lt;h1&gt;🎉 v2.6 🚀 Wolf Painting 🐺&lt;/h1&gt;
                 &lt;p&gt;We're thrilled to announce the release of Wolf Painting version 2.6! 🎊 This major update brings numerous improvements and new features that will make your experience even more enjoyable.&lt;/p&gt;&lt;br /&gt;
-                &lt;a href="https://github.com/TheBoredTeam/boring.notch/releases/download/wolf.painting/WolfPainting.dmg"&gt;&lt;h1&gt;Download from here&lt;/h1&gt;&lt;/a&gt;
+                &lt;a href="https://github.com/TheDIVeloper/crenelle/releases/download/wolf.painting/WolfPainting.dmg"&gt;&lt;h1&gt;Download from here&lt;/h1&gt;&lt;/a&gt;
                 &lt;h2&gt;🤔 What's Changed? 🤓&lt;/h2&gt;
                 &lt;ul&gt;
                 &lt;li&gt;🧠 Improved memory management and thread safety across the app&lt;/li&gt;
@@ -633,7 +633,7 @@
                 &lt;li&gt;For more details, check out &lt;a href="https://theboring.name"&gt;our website&lt;/a&gt;&lt;/li&gt;
                 &lt;/ul&gt;
             </description>
-            <enclosure url="https://github.com/TheBoredTeam/boring.notch/releases/download/wolf.painting/WolfPainting.dmg" length="8722621" type="application/octet-stream" sparkle:edSignature="j2Wp9e23UvN7yx2NztYfGbUiKfCU4qc2xpsPwBPx/ERUz01pJTfJlf8oN0Wri8gcho42/xfcfnWNwChfMPzrCQ==" />
+            <enclosure url="https://github.com/TheDIVeloper/crenelle/releases/download/wolf.painting/WolfPainting.dmg" length="8722621" type="application/octet-stream" sparkle:edSignature="j2Wp9e23UvN7yx2NztYfGbUiKfCU4qc2xpsPwBPx/ERUz01pJTfJlf8oN0Wri8gcho42/xfcfnWNwChfMPzrCQ==" />
         </item>
     </channel>
 </rss>

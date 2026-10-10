@@ -610,7 +610,7 @@ struct MusicSliderView: View {
     let isPlaying: Bool
     var onValueChange: (Double) -> Void
 
-    // Ported from Atoll (GPL-3.0, itself a boring.notch fork) so the
+    // Ported from Atoll (GPL-3.0, itself a crenelle fork) so the
     // trailing timestamp can count down instead of showing the duration.
     var trailingLabel: TrailingLabel = .duration
 

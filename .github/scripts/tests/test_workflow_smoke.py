@@ -46,7 +46,7 @@ class WorkflowSmokeTests(unittest.TestCase):
         # TAG is pinned to `nightly` below, so this prefix always resolves to
         # .../releases/download/nightly/.
         self.assertIn(
-            "https://github.com/TheBoredTeam/boring.notch/releases/download/${TAG}/",
+            "https://github.com/TheDIVeloper/crenelle/releases/download/${TAG}/",
             self.nightly,
         )
         self.assertIn("TAG: nightly", self.nightly)
@@ -308,20 +308,20 @@ class WorkflowSmokeTests(unittest.TestCase):
             self.assertNotIn(removed, self.nightly)
 
     def test_built_product_is_named_boring_notch(self) -> None:
-        # The Xcode product and app bundle are "Boring Notch", while the public
+        # The Xcode product and app bundle are "Crenelle", while the public
         # DMG keeps the legacy boringNotch.dmg name for download/appcast
         # compatibility. The project/target/scheme remain boringNotch.
         pbxproj = (
             REPOSITORY_ROOT / "boringNotch.xcodeproj" / "project.pbxproj"
         ).read_text(encoding="utf-8")
-        self.assertEqual(pbxproj.count('PRODUCT_NAME = "Boring Notch";'), 2)
+        self.assertEqual(pbxproj.count('PRODUCT_NAME = "Crenelle";'), 2)
         self.assertEqual(pbxproj.count('PRODUCT_MODULE_NAME = boringNotch;'), 2)
-        self.assertEqual(pbxproj.count('INFOPLIST_KEY_CFBundleName = "Boring Notch";'), 2)
-        self.assertEqual(pbxproj.count('INFOPLIST_KEY_CFBundleDisplayName = "Boring Notch";'), 2)
+        self.assertEqual(pbxproj.count('INFOPLIST_KEY_CFBundleName = "Crenelle";'), 2)
+        self.assertEqual(pbxproj.count('INFOPLIST_KEY_CFBundleDisplayName = "Crenelle";'), 2)
         self.assertEqual(
             pbxproj.count(
-                'TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Boring Notch.app/'
-                '$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Boring Notch";'
+                'TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Crenelle.app/'
+                '$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Crenelle";'
             ),
             2,
         )
@@ -333,13 +333,13 @@ class WorkflowSmokeTests(unittest.TestCase):
             / "xcschemes"
             / "boringNotch.xcscheme"
         ).read_text(encoding="utf-8")
-        self.assertEqual(scheme.count('BuildableName = "Boring Notch.app"'), 3)
+        self.assertEqual(scheme.count('BuildableName = "Crenelle.app"'), 3)
         self.assertIn("<TestAction", scheme)
         self.assertIn('BlueprintName = "boringNotchTests"', scheme)
 
         # Reusable build: archives under the project name, exports the app under
         # APP_NAME, and publishes the compatibility DMG under PROJECT_NAME.
-        self.assertIn("APP_NAME: Boring Notch", self.build_reusable)
+        self.assertIn("APP_NAME: Crenelle", self.build_reusable)
         self.assertIn('"Release/$APP_NAME.app"', self.build_reusable)
         self.assertIn('"Release/$PROJECT_NAME.dmg"', self.build_reusable)
         self.assertIn('name: ${{ env.PROJECT_NAME }}.dmg', self.build_reusable)
@@ -348,19 +348,19 @@ class WorkflowSmokeTests(unittest.TestCase):
 
         # Release pipeline: draft download, artifact download, release upload,
         # embedded notes, and the Homebrew cask all use the legacy DMG name.
-        self.assertIn("APP_NAME: Boring Notch", self.release)
+        self.assertIn("APP_NAME: Crenelle", self.release)
         self.assertIn('--pattern "$PROJECT_NAME.dmg"', self.release)
         self.assertIn('name: ${{ env.PROJECT_NAME }}.dmg', self.release)
         self.assertIn('"Release/$PROJECT_NAME.dmg"', self.release)
         self.assertIn("printf '%s' \"$RELEASE_NOTES\" > \"Release/${PROJECT_NAME}.html\"", self.release)
         self.assertIn("/${PROJECT_NAME}.dmg", self.release)
-        self.assertIn('app "Boring Notch.app"', self.release)
+        self.assertIn('app "Crenelle.app"', self.release)
         self.assertNotIn("Boring%20Notch.dmg", self.release)
         self.assertNotIn('app "boringNotch.app"', self.release)
 
         # Nightly: downloads the compatibility artifact, then renames it to the
         # fixed rolling asset name (which is intentionally unchanged).
-        self.assertIn("APP_NAME: Boring Notch", self.nightly)
+        self.assertIn("APP_NAME: Crenelle", self.nightly)
         self.assertIn('name: ${{ env.PROJECT_NAME }}.dmg', self.nightly)
         self.assertIn('mv "Release/${PROJECT_NAME}.dmg" "Release/${ASSET_NAME}"', self.nightly)
         self.assertNotIn("${APP_NAME}.dmg", self.nightly)

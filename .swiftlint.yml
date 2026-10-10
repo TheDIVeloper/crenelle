@@ -1,4 +1,4 @@
-# SwiftLint configuration for boring.notch
+# SwiftLint configuration for crenelle
 # Run with: swiftlint --config .swiftlint.yml
 
 included:
