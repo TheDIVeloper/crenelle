@@ -196,10 +196,12 @@ struct ContentView: View {
             DiskView()
         case .performance:
             PerformanceView()
+        case .network:
+            NetworkView()
         // Remaining tools are not shipped yet, so their tabs stay disabled and
         // these branches are unreachable from the tab bar. Each one gets its
         // real view here as it lands.
-        case .sound, .network, .caffeinate:
+        case .sound, .caffeinate:
             EmptyView()
         }
     }
