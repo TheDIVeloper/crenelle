@@ -21,10 +21,8 @@ struct SoundView: View {
             outputSection
             Divider().overlay(.white.opacity(0.1))
             inputSection
-
-            Text("Per app volume is not available yet.")
-                .font(.caption2)
-                .foregroundStyle(.tertiary)
+            Divider().overlay(.white.opacity(0.1))
+            PerAppMixerView()
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

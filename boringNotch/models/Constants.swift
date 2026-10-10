@@ -453,6 +453,14 @@ extension Defaults.Keys {
     static let osdReplacement = Key<Bool>(PreferenceCompatibility.migratedKeyName("osdReplacement", from: "hudReplacement"), default: false)
     static let inlineOSD = Key<Bool>(PreferenceCompatibility.migratedKeyName("inlineOSD", from: "inlineHUD"), default: false)
 
+    // MARK: Sound
+    /// Per-app volume mixer: apps pulled below 100% get a muted CoreAudio tap
+    /// and are re-rendered at the chosen gain. On by default; silently inert
+    /// below macOS 14.2 or if the System Audio Recording permission is refused.
+    static let featureVolumeMixer = Key<Bool>("featureVolumeMixer", default: true)
+    /// Per-app slider positions, keyed by bundle id (fallback "pid-<n>").
+    static let mixerAppVolumes = Key<[String: Double]>("mixerAppVolumes", default: [:])
+
     // MARK: Layout
     /// Swaps the opened notch for a smaller, player-only layout: no tab
     /// bar, calendar or mirror. Off by default so existing users keep the
