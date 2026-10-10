@@ -186,10 +186,12 @@ struct ContentView: View {
                 dropInteraction: vm.dropInteraction,
                 animation: vm.animation
             )
-        // Tools are not shipped yet, so their tabs are disabled and these
-        // branches are unreachable from the tab bar. Each one gets its real
-        // view here as it lands.
-        case .clipboard, .timer, .weather, .sound, .disk, .performance, .network, .caffeinate:
+        case .clipboard:
+            ClipboardView()
+        // Remaining tools are not shipped yet, so their tabs stay disabled and
+        // these branches are unreachable from the tab bar. Each one gets its
+        // real view here as it lands.
+        case .timer, .weather, .sound, .disk, .performance, .network, .caffeinate:
             EmptyView()
         }
     }

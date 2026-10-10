@@ -328,6 +328,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         windowManager.prepareInitialWindows()
 
+        // Start capturing clipboard history for the Clipboard tool.
+        ClipboardManager.shared.start()
+
         displayModeTask = Task { @MainActor [weak self] in
             for await mode in Defaults.updates(.displayMode, initial: true) {
                 guard let self else { return }
