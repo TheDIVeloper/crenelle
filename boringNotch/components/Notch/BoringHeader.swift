@@ -8,6 +8,63 @@
 import Defaults
 import SwiftUI
 
+private struct HeaderWeatherView: View {
+    @ObservedObject private var manager = WeatherManager.shared
+    @ObservedObject private var coordinator = BoringViewCoordinator.shared
+    @AppStorage("weatherUnit") private var unitRaw: String = TemperatureUnit.celsius.rawValue
+    @State private var isHovering: Bool = false
+
+    private var unit: TemperatureUnit {
+        TemperatureUnit(rawValue: unitRaw) ?? .celsius
+    }
+
+    var body: some View {
+        Button {
+            withAnimation(.smooth) {
+                if coordinator.currentView == .weather {
+                    coordinator.currentView = .home
+                } else {
+                    coordinator.currentView = .weather
+                }
+            }
+        } label: {
+            HStack(spacing: 5) {
+                if let snapshot = manager.snapshot {
+                    Image(systemName: WeatherCode.symbol(for: snapshot.weatherCode, isDay: snapshot.isDay))
+                        .font(.system(size: 13, weight: .medium))
+                        .symbolRenderingMode(.hierarchical)
+                    Text(unit.format(snapshot.temperature))
+                        .font(.system(size: 12, weight: .medium))
+                } else {
+                    Image(systemName: "cloud.sun.fill")
+                        .font(.system(size: 13, weight: .medium))
+                        .symbolRenderingMode(.hierarchical)
+                    Text("--°")
+                        .font(.system(size: 12, weight: .medium))
+                }
+            }
+            .foregroundStyle(coordinator.currentView == .weather ? .white : (isHovering ? .white : .white.opacity(0.85)))
+            .padding(.horizontal, 6)
+            .padding(.vertical, 3)
+            .background(
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .fill(coordinator.currentView == .weather ? Color.white.opacity(0.2) : (isHovering ? Color.white.opacity(0.12) : Color.clear))
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .help(coordinator.currentView == .weather ? "Return to Home" : "Open Weather Forecast")
+        .onHover { hovering in
+            withAnimation(.easeInOut(duration: 0.15)) {
+                isHovering = hovering
+            }
+        }
+        .task {
+            manager.refresh()
+        }
+    }
+}
+
 private struct HeaderIconButton: View {
     let icon: String
     let tooltip: String
@@ -45,9 +102,8 @@ struct BoringHeader: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            // Flexible leading spacer balances the trailing controls and keeps
-            // the hardware notch spacer precisely centred on notched screens.
-            Spacer(minLength: 0)
+            // Weather information placed at the top left of the header
+            HeaderWeatherView()
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             if vm.notchState == .open && vm.hasNotch {
