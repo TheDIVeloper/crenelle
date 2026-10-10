@@ -36,7 +36,7 @@ enum NotchViews: CaseIterable, Identifiable, Hashable {
     /// Tools switched on for the tab bar. A tool is added here only once its
     /// page actually exists, so the bar never advertises a view that has not
     /// shipped yet. Home and Shelf are always available.
-    private static let shippedTools: Set<NotchViews> = [.clipboard, .timer, .weather, .disk, .performance, .network, .caffeinate]
+    private static let shippedTools: Set<NotchViews> = [.clipboard, .timer, .weather, .disk, .performance, .network, .caffeinate, .sound]
 
     var isEnabled: Bool {
         switch self {
