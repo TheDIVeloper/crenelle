@@ -35,14 +35,11 @@ struct PerAppMixerView: View {
                     .padding(.vertical, 8)
                     .padding(.leading, 2)
             } else {
-                ScrollView {
-                    VStack(spacing: 6) {
-                        ForEach(manager.rows) { row in
-                            self.row(for: row)
-                        }
+                VStack(spacing: 6) {
+                    ForEach(manager.rows) { row in
+                        self.row(for: row)
                     }
                 }
-                .frame(maxHeight: 190)
             }
 
             if let error = manager.errorMessage {

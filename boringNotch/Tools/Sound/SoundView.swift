@@ -17,16 +17,19 @@ struct SoundView: View {
     @State private var inputSupportsVolume = true
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            outputSection
-            Divider().overlay(.white.opacity(0.1))
-            inputSection
-            Divider().overlay(.white.opacity(0.1))
-            PerAppMixerView()
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 14) {
+                outputSection
+                Divider().overlay(.white.opacity(0.1))
+                inputSection
+                Divider().overlay(.white.opacity(0.1))
+                PerAppMixerView()
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxHeight: 380)
         .onAppear { devices.refresh(); loadInput() }
         .onChange(of: devices.defaultInputID) { _, _ in loadInput() }
     }
