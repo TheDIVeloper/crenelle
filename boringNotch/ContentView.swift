@@ -158,11 +158,16 @@ struct ContentView: View {
         return content + shadowPadding
     }
 
+    /// Height of the full-width tab strip shown under the header when the
+    /// notch is open.
+    private var tabStripHeight: CGFloat { 30 }
+
     /// Scrollable region for an overflowing page: the capped panel height less
-    /// the pinned header and the panel's bottom padding.
+    /// the pinned header, the tab strip, and the panel's bottom padding.
     private var openPageViewportHeight: CGFloat {
         let panel = openNotchHeight ?? openNotchSize.height
-        return max(0, panel - max(38, displayClosedNotchHeight) - 12)
+        let chrome = max(38, displayClosedNotchHeight) + tabStripHeight + 12
+        return max(0, panel - chrome)
     }
 
     /// The page currently selected by the tab bar. Kept in one place so the
@@ -181,6 +186,11 @@ struct ContentView: View {
                 dropInteraction: vm.dropInteraction,
                 animation: vm.animation
             )
+        // Tools are not shipped yet, so their tabs are disabled and these
+        // branches are unreachable from the tab bar. Each one gets its real
+        // view here as it lands.
+        case .clipboard, .timer, .weather, .sound, .disk, .performance, .network, .caffeinate:
+            EmptyView()
         }
     }
 
@@ -603,7 +613,16 @@ struct ContentView: View {
                       }
                       .zIndex(1)
             if vm.notchState == .open {
-                VStack {
+                VStack(spacing: 0) {
+                    // Full-width tab strip, one row below the header. Shown
+                    // whenever the header is, so it disappears for compact
+                    // mode and notifications along with the rest of the chrome.
+                    if showsHeader {
+                        TabSelectionView()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: tabStripHeight)
+                            .padding(.bottom, 4)
+                    }
                     // An open notch with a live notification is showing the
                     // reply UI — the usual tabs can wait until it's dismissed.
                     if let notification = notificationManager.activeNotification {

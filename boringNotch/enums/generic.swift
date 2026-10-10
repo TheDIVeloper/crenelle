@@ -18,9 +18,64 @@ enum NotchState {
     case open
 }
 
-enum NotchViews {
+enum NotchViews: CaseIterable, Identifiable, Hashable {
     case home
     case shelf
+    // Tools. Declared in the order they should appear in the tab bar.
+    case clipboard
+    case timer
+    case weather
+    case sound
+    case disk
+    case performance
+    case network
+    case caffeinate
+
+    var id: Self { self }
+
+    /// Tools switched on for the tab bar. A tool is added here only once its
+    /// page actually exists, so the bar never advertises a view that has not
+    /// shipped yet. Home and Shelf are always available.
+    private static let shippedTools: Set<NotchViews> = []
+
+    var isEnabled: Bool {
+        switch self {
+        case .home, .shelf:
+            return true
+        default:
+            return Self.shippedTools.contains(self)
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .home: return String(localized: "Home")
+        case .shelf: return String(localized: "Shelf")
+        case .clipboard: return String(localized: "Clipboard")
+        case .timer: return String(localized: "Timer")
+        case .weather: return String(localized: "Weather")
+        case .sound: return String(localized: "Sound")
+        case .disk: return String(localized: "Disk")
+        case .performance: return String(localized: "Performance")
+        case .network: return String(localized: "Network")
+        case .caffeinate: return String(localized: "Caffeinate")
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .home: return "house.fill"
+        case .shelf: return "tray.fill"
+        case .clipboard: return "doc.on.clipboard"
+        case .timer: return "timer"
+        case .weather: return "cloud.sun.fill"
+        case .sound: return "speaker.wave.2.fill"
+        case .disk: return "externaldrive.fill"
+        case .performance: return "gauge.with.dots.needle.bottom.50percent"
+        case .network: return "network"
+        case .caffeinate: return "cup.and.saucer.fill"
+        }
+    }
 }
 
 enum DownloadIndicatorStyle: String, Defaults.Serializable {

@@ -12,20 +12,13 @@ struct BoringHeader: View {
     @EnvironmentObject var vm: BoringViewModel
     @ObservedObject var batteryModel = BatteryStatusViewModel.shared
     @ObservedObject var coordinator = BoringViewCoordinator.shared
-    @StateObject var shelfState = ShelfStateViewModel.shared
     var body: some View {
         HStack(spacing: 0) {
-            HStack {
-                if (!shelfState.isEmpty || coordinator.alwaysShowTabs) && Defaults[.boringShelf] {
-                    TabSelectionView()
-                } else if vm.notchState == .open {
-                    EmptyView()
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .opacity(vm.notchState == .closed ? 0 : 1)
-            .blur(radius: vm.notchState == .closed ? 20 : 0)
-            .zIndex(2)
+            // The tab bar now lives in its own full-width row beneath this
+            // header (see ContentView), so the left side is just the flexible
+            // half that keeps the notch spacer centred.
+            Spacer(minLength: 0)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             if vm.notchState == .open {
                 Rectangle()
