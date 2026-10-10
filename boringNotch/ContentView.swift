@@ -145,7 +145,7 @@ struct ContentView: View {
         case .performance: return 220
         case .network: return 210
         case .clipboard: return 220
-        case .sound: return 320
+        case .sound: return 520
         }
     }
 

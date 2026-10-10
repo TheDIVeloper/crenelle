@@ -29,7 +29,7 @@ struct SoundView: View {
             .padding(.vertical, 12)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(maxHeight: 380)
+        .frame(maxHeight: 520)
         .onAppear { devices.refresh(); loadInput() }
         .onChange(of: devices.defaultInputID) { _, _ in loadInput() }
     }
