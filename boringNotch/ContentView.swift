@@ -162,11 +162,17 @@ struct ContentView: View {
     /// notch is open.
     private var tabStripHeight: CGFloat { 30 }
 
+    /// Dynamic menu bar height for the active display.
+    private var menuBarHeight: CGFloat {
+        let currentScreen = vm.screenUUID.flatMap { NSScreen.screen(withUUID: $0) } ?? NSScreen.main
+        return getMenuBarHeight(for: currentScreen)
+    }
+
     /// Scrollable region for an overflowing page: the capped panel height less
     /// the pinned header, the tab strip, and the panel's bottom padding.
     private var openPageViewportHeight: CGFloat {
         let panel = openNotchHeight ?? openNotchSize.height
-        let chrome = max(38, displayClosedNotchHeight) + tabStripHeight + 12
+        let chrome = menuBarHeight + tabStripHeight + 12
         return max(0, panel - chrome)
     }
 
@@ -565,12 +571,12 @@ struct ContentView: View {
                           BoringFaceAnimation()
                        } else if showsHeader {
                            // No tab bar over a notification: it's a glance,
-                           // not a place to switch between home and shelf —
+                           // not a place to switch between home and shelf,
                            // and the header spans the full notch width,
                            // which is what was stretching the whole panel
                            // out around a short message.
                            BoringHeader()
-                               .frame(height: max(38, displayClosedNotchHeight))
+                               .frame(height: menuBarHeight)
                                .opacity(gestureProgress != 0 ? 1.0 - min(abs(gestureProgress) * 0.1, 0.3) : 1.0)
                        }
                         // New case to enable compact notch on external displays

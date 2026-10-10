@@ -58,20 +58,24 @@ enum MusicPlayerImageSizes {
 
 @MainActor private func defaultMenuBarHeight(hasNotch: Bool) -> CGFloat {
     if #available(macOS 26.0, *) {
-        return hasNotch ? 38 : 29
+        return hasNotch ? 38 : 30
     }
 
-    return hasNotch ? 43 : 23
+    return hasNotch ? 32 : 30
 }
 
 @MainActor private func resolvedMenuBarHeight(for screen: NSScreen?) -> CGFloat {
     if let screen {
-        let measuredHeight = max(0, screen.frame.maxY - screen.visibleFrame.maxY - 1)
+        if screen.safeAreaInsets.top > 0 {
+            return screen.safeAreaInsets.top
+        }
+
+        let measuredHeight = max(0, screen.frame.maxY - screen.visibleFrame.maxY)
         if measuredHeight > 0 {
             return measuredHeight
         }
 
-        return defaultMenuBarHeight(hasNotch: screen.safeAreaInsets.top > 0)
+        return defaultMenuBarHeight(hasNotch: false)
     }
 
     return defaultMenuBarHeight(hasNotch: false)
