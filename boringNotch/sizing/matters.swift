@@ -154,6 +154,16 @@ enum LegacyNonNotchHeightMigration {
     }
 }
 
+/// Upper bound for the content-adaptive open panel: the space between the menu
+/// bar and the bottom of the screen, less a margin so the panel never touches
+/// the dock. Pages taller than this scroll instead of growing the panel.
+@MainActor func maxOpenNotchHeight(screenUUID: String? = nil) -> CGFloat {
+    let screen = screenUUID.flatMap { NSScreen.screen(withUUID: $0) } ?? NSScreen.main ?? NSScreen.screens.first
+    guard let screen else { return openNotchSize.height }
+    let available = screen.frame.height - getMenuBarHeight(for: screen)
+    return max(openNotchSize.height, available - 24)
+}
+
 @MainActor func getClosedNotchSize(screenUUID: String? = nil) -> CGSize {
     // Default notch size, to avoid using optionals
     var notchHeight: CGFloat = Defaults[.nonNotchHeight]

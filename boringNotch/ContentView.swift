@@ -24,6 +24,9 @@ struct ContentView: View {
     @ObservedObject var notificationManager = SystemNotificationManager.shared
     /// Which entry of the closed-notch activity stack is on top.
     @State private var activityIndex: Int = 0
+    /// Natural height of the open notch content, measured each layout pass so
+    /// the panel can grow to fit the current page.
+    @State private var measuredOpenHeight: CGFloat = 0
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -133,7 +136,52 @@ struct ContentView: View {
     /// lever anyway.
     private var openNotchHeight: CGFloat? {
         if notificationManager.activeNotification != nil { return 132 }
-        return Defaults[.compactMode] ? nil : vm.notchSize.height
+        guard !Defaults[.compactMode] else { return nil }
+        // Content-adaptive: grow to the measured page height, but never shrink
+        // below the standard open size or past the screen. nil only until the
+        // first measurement lands, so the initial frame matches today's layout.
+        guard measuredOpenHeight > 0 else { return vm.notchSize.height }
+        let ceiling = maxOpenNotchHeight(screenUUID: vm.screenUUID)
+        return min(max(measuredOpenHeight, openNotchSize.height), ceiling)
+    }
+
+    /// True when the measured content is taller than the screen allows, so the
+    /// page should scroll inside a capped panel instead of being clipped.
+    private var isOpenPageOverflowing: Bool {
+        measuredOpenHeight > maxOpenNotchHeight(screenUUID: vm.screenUUID)
+    }
+
+    /// Height the host window should hold: the visible panel plus the shadow
+    /// gutter, kept constant while closed.
+    private var targetWindowHeight: CGFloat {
+        let content = vm.notchState == .open ? (openNotchHeight ?? openNotchSize.height) : openNotchSize.height
+        return content + shadowPadding
+    }
+
+    /// Scrollable region for an overflowing page: the capped panel height less
+    /// the pinned header and the panel's bottom padding.
+    private var openPageViewportHeight: CGFloat {
+        let panel = openNotchHeight ?? openNotchSize.height
+        return max(0, panel - max(38, displayClosedNotchHeight) - 12)
+    }
+
+    /// The page currently selected by the tab bar. Kept in one place so the
+    /// overflow branch and the natural branch render identically.
+    @ViewBuilder
+    private var openPageView: some View {
+        switch coordinator.currentView {
+        case .home:
+            NotchHomeView(
+                albumArtNamespace: albumArtNamespace,
+                horizontalMediaGestureFeedback: horizontalMediaGestureFeedback,
+                isHoveringMusicArea: $isHoveringMusicArea
+            )
+        case .shelf:
+            ShelfView(
+                dropInteraction: vm.dropInteraction,
+                animation: vm.animation
+            )
+        }
     }
 
     /// Compact mode drops the tab bar along with the tabs it switches
@@ -280,6 +328,7 @@ struct ContentView: View {
                     )
                     // Removed conditional bottom padding when using custom 0 notch to keep layout stable
                     .opacity((isNotchHeightZero && vm.notchState == .closed) ? 0.01 : 1)
+                    .measuresPageHeight()
 
                 mainLayout
                     // alignment: .top matters here — without it this frame
@@ -290,6 +339,9 @@ struct ContentView: View {
                     // top-anchored origin. That's what read as "the notch
                     // sits a bit off the top of the screen."
                     .frame(height: vm.notchState == .open ? openNotchHeight : nil, alignment: .top)
+                    .onPreferenceChange(PageHeightPreferenceKey.self) { height in
+                        measuredOpenHeight = height
+                    }
                     .conditionalModifier(true) { view in
                         return view
                             .animation(vm.notchState == .open ? StandardAnimations.open : StandardAnimations.close, value: vm.notchState)
@@ -371,7 +423,11 @@ struct ContentView: View {
             }
         }
         .padding(.bottom, 8)
-        .frame(maxWidth: windowSize.width, maxHeight: windowSize.height, alignment: .top)
+        .frame(
+            maxWidth: windowSize.width,
+            maxHeight: max(windowSize.height, targetWindowHeight),
+            alignment: .top
+        )
         .ignoresSafeArea(.all)
         .compositingGroup()
         .scaleEffect(
@@ -381,6 +437,10 @@ struct ContentView: View {
         )
         .animation(.smooth, value: gestureProgress)
         .background(dragDetector)
+        .background(
+            WindowHeightAdjuster(height: targetWindowHeight)
+                .frame(width: 0, height: 0)
+        )
         .preferredColorScheme(.dark)
         .environmentObject(vm)
         .onChange(of: dropInteraction.anyDropZoneTargeting) { _, isTargeted in
@@ -567,20 +627,15 @@ struct ContentView: View {
                         .onDisappear {
                             isHoveringMusicArea = false
                         }
-                    } else {
-                        switch coordinator.currentView {
-                        case .home:
-                            NotchHomeView(
-                                albumArtNamespace: albumArtNamespace,
-                                horizontalMediaGestureFeedback: horizontalMediaGestureFeedback,
-                                isHoveringMusicArea: $isHoveringMusicArea
-                            )
-                        case .shelf:
-                            ShelfView(
-                                dropInteraction: vm.dropInteraction,
-                                animation: vm.animation
-                            )
+                    } else if isOpenPageOverflowing {
+                        // Taller than the screen allows: cap the panel and let
+                        // the page scroll rather than clipping it.
+                        ScrollView(.vertical, showsIndicators: false) {
+                            openPageView
                         }
+                        .frame(height: openPageViewportHeight)
+                    } else {
+                        openPageView
                     }
                 }
                 .transition(
