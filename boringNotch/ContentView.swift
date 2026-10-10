@@ -24,9 +24,9 @@ struct ContentView: View {
     @ObservedObject var notificationManager = SystemNotificationManager.shared
     /// Which entry of the closed-notch activity stack is on top.
     @State private var activityIndex: Int = 0
-    /// Natural height of the open notch content, measured each layout pass so
-    /// the panel can grow to fit the current page.
-    @State private var measuredOpenHeight: CGFloat = 0
+    /// Measured natural content height per tab so each tool tab scales individually
+    /// to its own content rather than inheriting previous tabs' heights.
+    @State private var tabHeights: [NotchViews: CGFloat] = [:]
     @State private var hoverTask: Task<Void, Never>?
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
@@ -134,21 +134,42 @@ struct ContentView: View {
     /// as a hover-exit and closed the notch. The compact panel's height is
     /// controlled by its own internal padding instead, which is the honest
     /// lever anyway.
+    private func defaultContentHeight(for tab: NotchViews) -> CGFloat {
+        switch tab {
+        case .home: return 120
+        case .shelf: return 120
+        case .weather: return 150
+        case .timer: return 160
+        case .caffeinate: return 180
+        case .disk: return 200
+        case .performance: return 220
+        case .network: return 210
+        case .clipboard: return 220
+        case .sound: return 320
+        }
+    }
+
+    private var currentTabContentHeight: CGFloat {
+        tabHeights[coordinator.currentView] ?? defaultContentHeight(for: coordinator.currentView)
+    }
+
+    private var openNotchChromeHeight: CGFloat {
+        menuBarHeight + tabStripHeight + 16
+    }
+
     private var openNotchHeight: CGFloat? {
         if notificationManager.activeNotification != nil { return 132 }
         guard !Defaults[.compactMode] else { return nil }
-        // Content-adaptive: grow to the measured page height, but never shrink
-        // below the standard open size or past the screen. nil only until the
-        // first measurement lands, so the initial frame matches today's layout.
-        guard measuredOpenHeight > 0 else { return vm.notchSize.height }
+        let target = currentTabContentHeight + openNotchChromeHeight
         let ceiling = maxOpenNotchHeight(screenUUID: vm.screenUUID)
-        return min(max(measuredOpenHeight, openNotchSize.height), ceiling)
+        return min(max(target, openNotchSize.height), ceiling)
     }
 
     /// True when the measured content is taller than the screen allows, so the
     /// page should scroll inside a capped panel instead of being clipped.
     private var isOpenPageOverflowing: Bool {
-        measuredOpenHeight > maxOpenNotchHeight(screenUUID: vm.screenUUID)
+        let ceiling = maxOpenNotchHeight(screenUUID: vm.screenUUID)
+        return (currentTabContentHeight + openNotchChromeHeight) > ceiling
     }
 
     /// Height the host window should hold: the visible panel plus the shadow
@@ -355,7 +376,6 @@ struct ContentView: View {
                     )
                     // Removed conditional bottom padding when using custom 0 notch to keep layout stable
                     .opacity((isNotchHeightZero && vm.notchState == .closed) ? 0.01 : 1)
-                    .measuresPageHeight()
 
                 mainLayout
                     // alignment: .top matters here — without it this frame
@@ -367,7 +387,8 @@ struct ContentView: View {
                     // sits a bit off the top of the screen."
                     .frame(height: vm.notchState == .open ? openNotchHeight : nil, alignment: .top)
                     .onPreferenceChange(PageHeightPreferenceKey.self) { height in
-                        measuredOpenHeight = height
+                        guard height > 0 else { return }
+                        tabHeights[coordinator.currentView] = height
                     }
                     .conditionalModifier(true) { view in
                         return view
@@ -668,10 +689,14 @@ struct ContentView: View {
                         // the page scroll rather than clipping it.
                         ScrollView(.vertical, showsIndicators: false) {
                             openPageView
+                                .id(coordinator.currentView)
+                                .measuresPageHeight()
                         }
                         .frame(height: openPageViewportHeight)
                     } else {
                         openPageView
+                            .id(coordinator.currentView)
+                            .measuresPageHeight()
                     }
                 }
                 .transition(

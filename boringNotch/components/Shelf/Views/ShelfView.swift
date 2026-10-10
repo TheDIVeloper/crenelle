@@ -33,6 +33,7 @@ struct ShelfView: View {
                     }
             }
         }
+        .frame(height: 120)
     }
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
