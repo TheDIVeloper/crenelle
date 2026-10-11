@@ -120,10 +120,17 @@ final class WeatherManager: NSObject, ObservableObject {
             URLQueryItem(name: "longitude", value: String(coordinate.longitude)),
             URLQueryItem(
                 name: "current",
-                value: "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,weather_code,wind_speed_10m"
+                value: "temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,weather_code,wind_speed_10m"
             ),
-            URLQueryItem(name: "daily", value: "temperature_2m_max,temperature_2m_min"),
-            URLQueryItem(name: "forecast_days", value: "1"),
+            URLQueryItem(
+                name: "hourly",
+                value: "temperature_2m,precipitation_probability,weather_code,is_day"
+            ),
+            URLQueryItem(
+                name: "daily",
+                value: "temperature_2m_max,temperature_2m_min,sunrise,sunset,uv_index_max"
+            ),
+            URLQueryItem(name: "forecast_days", value: "2"),
             URLQueryItem(name: "timezone", value: "auto"),
         ]
 
@@ -135,6 +142,42 @@ final class WeatherManager: NSObject, ObservableObject {
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
             let response = try JSONDecoder().decode(OpenMeteoResponse.self, from: data)
+
+            var hourlyItems: [HourlyForecastItem] = []
+            if let hourly = response.hourly {
+                let currentTime = response.current.time
+                var startIndex = 0
+                for (idx, timeStr) in hourly.time.enumerated() {
+                    if timeStr >= currentTime {
+                        startIndex = idx
+                        break
+                    }
+                }
+
+                let endIndex = min(startIndex + 12, hourly.time.count)
+                for idx in startIndex..<endIndex {
+                    let timeStr = hourly.time[idx]
+                    let label = idx == startIndex ? String(localized: "Now") : Self.formatHour(from: timeStr)
+                    let temp = idx < hourly.temperature_2m.count ? hourly.temperature_2m[idx] : response.current.temperature_2m
+                    let code = idx < hourly.weather_code.count ? hourly.weather_code[idx] : response.current.weather_code
+                    let prob = (hourly.precipitation_probability != nil && idx < hourly.precipitation_probability!.count) ? hourly.precipitation_probability![idx] : 0
+                    let dayVal = idx < hourly.is_day.count ? hourly.is_day[idx] : 1
+
+                    hourlyItems.append(HourlyForecastItem(
+                        id: timeStr,
+                        timeLabel: label,
+                        temperature: temp,
+                        weatherCode: code,
+                        precipitationProbability: prob,
+                        isDay: dayVal == 1
+                    ))
+                }
+            }
+
+            let sunriseFormatted = Self.formatSunTime(from: response.daily.sunrise?.first)
+            let sunsetFormatted = Self.formatSunTime(from: response.daily.sunset?.first)
+            let uv = response.daily.uv_index_max?.first
+
             snapshot = WeatherSnapshot(
                 temperature: response.current.temperature_2m,
                 apparentTemperature: response.current.apparent_temperature,
@@ -144,6 +187,11 @@ final class WeatherManager: NSObject, ObservableObject {
                 isDay: response.current.is_day == 1,
                 high: response.daily.temperature_2m_max.first ?? response.current.temperature_2m,
                 low: response.daily.temperature_2m_min.first ?? response.current.temperature_2m,
+                precipitation: response.current.precipitation ?? 0.0,
+                sunrise: sunriseFormatted,
+                sunset: sunsetFormatted,
+                uvIndex: uv,
+                hourly: hourlyItems,
                 fetchedAt: .now
             )
             lastFetch = .now
@@ -151,6 +199,27 @@ final class WeatherManager: NSObject, ObservableObject {
         } catch {
             status = .failed(error.localizedDescription)
         }
+    }
+
+    private static func formatHour(from isoString: String) -> String {
+        let parts = isoString.split(separator: "T")
+        guard parts.count == 2 else { return isoString }
+        let timeParts = parts[1].split(separator: ":")
+        guard let hour24 = Int(timeParts[0]) else { return String(parts[1]) }
+        let ampm = hour24 < 12 ? "AM" : "PM"
+        let hour12 = hour24 % 12 == 0 ? 12 : hour24 % 12
+        return "\(hour12) \(ampm)"
+    }
+
+    private static func formatSunTime(from isoString: String?) -> String? {
+        guard let isoString else { return nil }
+        let parts = isoString.split(separator: "T")
+        guard parts.count == 2 else { return isoString }
+        let timeParts = parts[1].split(separator: ":")
+        guard timeParts.count >= 2, let hour24 = Int(timeParts[0]) else { return String(parts[1]) }
+        let ampm = hour24 < 12 ? "AM" : "PM"
+        let hour12 = hour24 % 12 == 0 ? 12 : hour24 % 12
+        return "\(hour12):\(timeParts[1]) \(ampm)"
     }
 }
 
@@ -182,10 +251,12 @@ extension WeatherManager: CLLocationManagerDelegate {
 
 private struct OpenMeteoResponse: Decodable {
     struct Current: Decodable {
+        let time: String
         let temperature_2m: Double
         let relative_humidity_2m: Double
         let apparent_temperature: Double
         let is_day: Int
+        let precipitation: Double?
         let weather_code: Int
         let wind_speed_10m: Double
     }
@@ -193,8 +264,20 @@ private struct OpenMeteoResponse: Decodable {
     struct Daily: Decodable {
         let temperature_2m_max: [Double]
         let temperature_2m_min: [Double]
+        let sunrise: [String]?
+        let sunset: [String]?
+        let uv_index_max: [Double]?
+    }
+
+    struct Hourly: Decodable {
+        let time: [String]
+        let temperature_2m: [Double]
+        let precipitation_probability: [Int]?
+        let weather_code: [Int]
+        let is_day: [Int]
     }
 
     let current: Current
     let daily: Daily
+    let hourly: Hourly?
 }

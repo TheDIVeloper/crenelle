@@ -2,10 +2,19 @@
 //  WeatherModels.swift
 //  Crenelle
 //
-//  Weather value types and WMO code mapping. Created 2026-10-10 by Ian L.
+//  Weather value types, hourly timeline data, and WMO code mapping. Created 2026-10-10 by Ian L.
 //
 
 import Foundation
+
+struct HourlyForecastItem: Identifiable, Equatable {
+    let id: String
+    let timeLabel: String
+    let temperature: Double
+    let weatherCode: Int
+    let precipitationProbability: Int
+    let isDay: Bool
+}
 
 struct WeatherSnapshot: Equatable {
     let temperature: Double
@@ -16,6 +25,11 @@ struct WeatherSnapshot: Equatable {
     let isDay: Bool
     let high: Double
     let low: Double
+    let precipitation: Double
+    let sunrise: String?
+    let sunset: String?
+    let uvIndex: Double?
+    let hourly: [HourlyForecastItem]
     let fetchedAt: Date
 }
 

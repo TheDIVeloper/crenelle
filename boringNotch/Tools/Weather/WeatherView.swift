@@ -2,7 +2,8 @@
 //  WeatherView.swift
 //  Crenelle
 //
-//  Weather tab. Created 2026-10-10 by Ian L.
+//  Redesigned weather tab with hero overview, metric grid, and hourly timeline.
+//  Created 2026-10-10 by Ian L.
 //
 
 import Combine
@@ -21,7 +22,7 @@ struct WeatherView: View {
     var body: some View {
         content
             .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.vertical, 10)
             .frame(maxWidth: .infinity)
             .task { manager.refresh() }
             .onReceive(timer) { _ in manager.refresh(force: true) }
@@ -61,12 +62,16 @@ struct WeatherView: View {
     }
 
     private func ready(_ snapshot: WeatherSnapshot) -> some View {
-        VStack(spacing: 12) {
-            HStack(alignment: .top, spacing: 14) {
+        VStack(spacing: 10) {
+            HStack(alignment: .top, spacing: 12) {
                 heroCard(snapshot)
                     .frame(width: 220)
 
                 metricGrid(snapshot)
+            }
+
+            if !snapshot.hourly.isEmpty {
+                hourlySection(snapshot)
             }
 
             footer(snapshot)
@@ -75,38 +80,59 @@ struct WeatherView: View {
 
     private func heroCard(_ snapshot: WeatherSnapshot) -> some View {
         VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 4) {
+                Image(systemName: "mappin.and.ellipse")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                Text(manager.placeName ?? "Current Location")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+
+                Spacer(minLength: 4)
+
+                unitPicker
+            }
+
             HStack(spacing: 12) {
                 Image(systemName: WeatherCode.symbol(for: snapshot.weatherCode, isDay: snapshot.isDay))
-                    .font(.system(size: 40))
+                    .font(.system(size: 38))
                     .symbolRenderingMode(.multicolor)
-                    .frame(width: 44, height: 44)
+                    .frame(width: 42, height: 42)
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text("\(unit.temperature(snapshot.temperature))°")
-                        .font(.system(size: 36, weight: .semibold, design: .rounded))
+                        .font(.system(size: 34, weight: .semibold, design: .rounded))
                         .foregroundStyle(.white)
                         .contentTransition(.numericText())
 
                     Text(WeatherCode.description(for: snapshot.weatherCode))
                         .font(.subheadline)
+                        .fontWeight(.medium)
                         .foregroundStyle(.white.opacity(0.85))
                         .lineLimit(1)
                 }
             }
 
-            if let place = manager.placeName {
-                HStack(spacing: 4) {
-                    Image(systemName: "mappin.and.ellipse")
-                        .font(.caption2)
-                    Text(place)
-                        .font(.caption)
-                }
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-            }
+            HStack(spacing: 6) {
+                Text("↑ \(unit.temperature(snapshot.high))°  ↓ \(unit.temperature(snapshot.low))°")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
-            unitPicker
-                .padding(.top, 2)
+                Spacer()
+
+                if let sunTime = snapshot.isDay ? snapshot.sunset : snapshot.sunrise {
+                    HStack(spacing: 3) {
+                        Image(systemName: snapshot.isDay ? "sunset.fill" : "sunrise.fill")
+                            .font(.system(size: 10))
+                            .symbolRenderingMode(.multicolor)
+                        Text(sunTime)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -121,7 +147,7 @@ struct WeatherView: View {
     }
 
     private func metricGrid(_ snapshot: WeatherSnapshot) -> some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 10) {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 10), GridItem(.flexible(), spacing: 10)], spacing: 8) {
             metricTile(
                 icon: "thermometer.medium",
                 title: "FEELS LIKE",
@@ -130,10 +156,10 @@ struct WeatherView: View {
             )
 
             metricTile(
-                icon: "arrow.up.and.down",
-                title: "HIGH / LOW",
-                value: "↑ \(unit.temperature(snapshot.high))°  ↓ \(unit.temperature(snapshot.low))°",
-                subtitle: "Daily range"
+                icon: "cloud.rain.fill",
+                title: "PRECIPITATION",
+                value: snapshot.precipitation > 0 ? String(format: "%.1f mm", snapshot.precipitation) : "\(snapshot.hourly.first?.precipitationProbability ?? 0)%",
+                subtitle: snapshot.precipitation > 0 ? "Observed" : "Rain chance"
             )
 
             metricTile(
@@ -158,7 +184,7 @@ struct WeatherView: View {
         value: String,
         subtitle: String
     ) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 3) {
             HStack(spacing: 5) {
                 Image(systemName: icon)
                     .font(.system(size: 10, weight: .semibold))
@@ -179,7 +205,7 @@ struct WeatherView: View {
                 .lineLimit(1)
         }
         .padding(.horizontal, 10)
-        .padding(.vertical, 8)
+        .padding(.vertical, 7)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
             RoundedRectangle(cornerRadius: 10)
@@ -188,6 +214,76 @@ struct WeatherView: View {
         .overlay {
             RoundedRectangle(cornerRadius: 10)
                 .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        }
+    }
+
+    private func hourlySection(_ snapshot: WeatherSnapshot) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 5) {
+                Image(systemName: "clock")
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                Text("HOURLY FORECAST")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(.secondary)
+                Spacer()
+            }
+            .padding(.horizontal, 10)
+            .padding(.top, 8)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 6) {
+                    ForEach(snapshot.hourly) { item in
+                        hourlyTile(item)
+                    }
+                }
+                .padding(.horizontal, 8)
+                .padding(.bottom, 8)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background {
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.white.opacity(0.04))
+        }
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        }
+    }
+
+    private func hourlyTile(_ item: HourlyForecastItem) -> some View {
+        VStack(spacing: 4) {
+            Text(item.timeLabel)
+                .font(.system(size: 10, weight: item.timeLabel == "Now" ? .bold : .medium))
+                .foregroundStyle(item.timeLabel == "Now" ? .white : .secondary)
+
+            Image(systemName: WeatherCode.symbol(for: item.weatherCode, isDay: item.isDay))
+                .font(.system(size: 16))
+                .symbolRenderingMode(.multicolor)
+                .frame(height: 18)
+
+            if item.precipitationProbability >= 15 {
+                Text("\(item.precipitationProbability)%")
+                    .font(.system(size: 8, weight: .bold))
+                    .foregroundStyle(Color.cyan)
+                    .frame(height: 10)
+            } else {
+                Color.clear
+                    .frame(height: 10)
+            }
+
+            Text("\(unit.temperature(item.temperature))°")
+                .font(.system(size: 11, weight: .semibold, design: .rounded))
+                .foregroundStyle(.white)
+        }
+        .frame(width: 44)
+        .padding(.vertical, 5)
+        .background {
+            if item.timeLabel == "Now" {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.white.opacity(0.06))
+            }
         }
     }
 
@@ -224,7 +320,12 @@ struct WeatherView: View {
 
     private func footer(_ snapshot: WeatherSnapshot) -> some View {
         HStack(spacing: 6) {
+            Text("Open-Meteo")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+
             Spacer()
+
             Button {
                 manager.refresh(force: true)
             } label: {
@@ -233,6 +334,7 @@ struct WeatherView: View {
             }
             .buttonStyle(.plain)
             .foregroundStyle(.secondary)
+
             Text("Updated \(snapshot.fetchedAt.formatted(.relative(presentation: .named)))")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
@@ -248,7 +350,8 @@ struct WeatherView: View {
         }
         .pickerStyle(.segmented)
         .labelsHidden()
-        .frame(width: 96)
+        .frame(width: 76)
+        .scaleEffect(0.9)
     }
 
     private func message(

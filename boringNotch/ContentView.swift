@@ -135,7 +135,7 @@ struct ContentView: View {
         switch tab {
         case .home: return 120
         case .shelf: return 120
-        case .weather: return 150
+        case .weather: return 270
         case .timer: return 160
         case .caffeinate: return 180
         case .disk: return 200
