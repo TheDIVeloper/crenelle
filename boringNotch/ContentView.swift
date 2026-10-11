@@ -31,9 +31,6 @@ struct ContentView: View {
     @State private var isHovering: Bool = false
     @State private var anyDropDebounceTask: Task<Void, Never>?
 
-    @State private var gestureProgress: CGFloat = .zero
-    @State private var horizontalMediaGestureTriggered = false
-    @State private var horizontalMediaGestureFeedback: CGFloat = .zero
     @State private var isHoveringMusicArea = false
 
     @State private var haptics: Bool = false
@@ -205,7 +202,7 @@ struct ContentView: View {
         case .home:
             NotchHomeView(
                 albumArtNamespace: albumArtNamespace,
-                horizontalMediaGestureFeedback: horizontalMediaGestureFeedback,
+                horizontalMediaGestureFeedback: 0,
                 isHoveringMusicArea: $isHoveringMusicArea
             )
         case .shelf:
@@ -345,13 +342,6 @@ struct ContentView: View {
     var body: some View {
         @Bindable var dropInteraction = vm.dropInteraction
 
-        // Calculate scale based on gesture progress only
-        let gestureScale: CGFloat = {
-            guard gestureProgress != 0 else { return 1.0 }
-            let scaleFactor = 1.0 + gestureProgress * 0.01
-            return max(0.6, scaleFactor)
-        }()
-
         ZStack(alignment: .top) {
             VStack(spacing: 0) {
                 let mainLayout = NotchLayout()
@@ -393,7 +383,6 @@ struct ContentView: View {
                     .conditionalModifier(true) { view in
                         return view
                             .animation(vm.notchState == .open ? StandardAnimations.open : StandardAnimations.close, value: vm.notchState)
-                            .animation(.smooth, value: gestureProgress)
                             // Outermost on purpose: it only fires when the
                             // closed-state content changes (the key is stable
                             // across open/close), and when several keys change
@@ -409,27 +398,6 @@ struct ContentView: View {
                         if vm.notchState == .closed && !shouldDisplayNowPlayingFallbackNotice {
                             doOpen()
                         }
-                    }
-                    .conditionalModifier(Defaults[.enableGestures] && !shouldDisplayNowPlayingFallbackNotice) { view in
-                        view
-                            .panGesture(direction: .down) { translation, phase in
-                                handleDownGesture(translation: translation, phase: phase)
-                            }
-                    }
-                    .conditionalModifier(Defaults[.closeGestureEnabled] && Defaults[.enableGestures] && !shouldDisplayNowPlayingFallbackNotice) { view in
-                        view
-                            .panGesture(direction: .up) { translation, phase in
-                                handleUpGesture(translation: translation, phase: phase)
-                            }
-                    }
-                    .conditionalModifier(Defaults[.enableHorizontalMediaGestures] && Defaults[.enableGestures] && !shouldDisplayNowPlayingFallbackNotice) { view in
-                        view
-                            .panGesture(direction: .left) { translation, phase in
-                                handleNextTrackGesture(translation: translation, phase: phase)
-                            }
-                            .panGesture(direction: .right) { translation, phase in
-                                handlePreviousTrackGesture(translation: translation, phase: phase)
-                            }
                     }
                     .onReceive(NotificationCenter.default.publisher(for: .sharingDidFinish)) { _ in
                         scheduleCloseIfNotHovering(overNotch: vm)
@@ -478,12 +446,6 @@ struct ContentView: View {
         )
         .ignoresSafeArea(.all)
         .compositingGroup()
-        .scaleEffect(
-            x: gestureScale,
-            y: gestureScale,
-            anchor: .top
-        )
-        .animation(.smooth, value: gestureProgress)
         .background(dragDetector)
         .background(
             WindowHeightAdjuster(height: targetWindowHeight)
@@ -575,7 +537,7 @@ struct ContentView: View {
                               icon: coordinator.binding(for: vm.screenUUID).icon,
                               accent: coordinator.binding(for: vm.screenUUID).accent,
                               hoverAnimation: $isHovering,
-                              gestureProgress: $gestureProgress
+                              gestureProgress: .constant(0)
                           )
                               .transition(.opacity)
                       } else if !liveActivities.isEmpty && vm.notchState == .closed && !vm.hideOnClosed {
@@ -598,7 +560,6 @@ struct ContentView: View {
                            // out around a short message.
                            BoringHeader()
                                .frame(height: menuBarHeight)
-                               .opacity(gestureProgress != 0 ? 1.0 - min(abs(gestureProgress) * 0.1, 0.3) : 1.0)
                        }
                         // New case to enable compact notch on external displays
                         else if !vm.hasNotch {
@@ -675,7 +636,7 @@ struct ContentView: View {
                         // (340) — the tighter of their two compact sizes.
                         CompactHomeView(
                             albumArtNamespace: albumArtNamespace,
-                            horizontalMediaGestureFeedback: horizontalMediaGestureFeedback
+                            horizontalMediaGestureFeedback: 0
                         )
                         .frame(width: 336)
                         .onHover { hovering in
@@ -706,7 +667,6 @@ struct ContentView: View {
                 )
                 .zIndex(1)
                 .allowsHitTesting(vm.notchState == .open)
-                .opacity(gestureProgress != 0 ? 1.0 - min(abs(gestureProgress) * 0.1, 0.3) : 1.0)
             }
         }
         .onDrop(of: [.fileURL, .url, .utf8PlainText, .plainText, .data], delegate: GeneralDropTargetDelegate(isTargeted: $dropInteraction.generalDropTargeting))
@@ -890,7 +850,6 @@ struct ContentView: View {
                 width: max(
                     0,
                     displayClosedNotchHeight - 12
-                        + gestureProgress / 2
                 ),
                 height: max(
                     0,
@@ -1009,7 +968,7 @@ extension ContentView {
                         self.isHovering = false
                     }
 
-                    // Pointer left — let the notification age out again.
+                    // Pointer left: let the notification age out again.
                     self.notificationManager.resumeDismiss()
 
                     if self.vm.notchState == .open,
@@ -1019,143 +978,6 @@ extension ContentView {
                     }
                 }
             }
-        }
-    }
-
-    // MARK: - Gesture Handling
-
-    private func handleDownGesture(translation: CGFloat, phase: NSEvent.Phase) {
-        guard vm.notchState == .closed else { return }
-
-        if phase == .ended {
-            withAnimation(animationSpring) { gestureProgress = .zero }
-            return
-        }
-
-        withAnimation(animationSpring) {
-            gestureProgress = (translation / Defaults[.gestureSensitivity]) * 20
-        }
-
-        if translation > Defaults[.gestureSensitivity] {
-            if Defaults[.enableHaptics] {
-                haptics.toggle()
-            }
-            withAnimation(animationSpring) {
-                gestureProgress = .zero
-            }
-            doOpen()
-        }
-    }
-
-    private func handleUpGesture(translation: CGFloat, phase: NSEvent.Phase) {
-        guard vm.notchState == .open && !vm.isHoveringCalendar else { return }
-
-        withAnimation(animationSpring) {
-            gestureProgress = (translation / Defaults[.gestureSensitivity]) * -20
-        }
-
-        if phase == .ended {
-            withAnimation(animationSpring) {
-                gestureProgress = .zero
-            }
-        }
-
-        if translation > Defaults[.gestureSensitivity] {
-            withAnimation(animationSpring) {
-                isHovering = false
-            }
-            if !SharingStateManager.shared.preventNotchClose {
-                gestureProgress = .zero
-                vm.close()
-            }
-
-            if Defaults[.enableHaptics] {
-                haptics.toggle()
-            }
-        }
-    }
-
-    private func handleNextTrackGesture(translation: CGFloat, phase: NSEvent.Phase) {
-        handleHorizontalMediaGesture(translation: translation, phase: phase, feedback: -1) {
-            musicManager.nextTrack()
-        }
-    }
-
-    private func handlePreviousTrackGesture(translation: CGFloat, phase: NSEvent.Phase) {
-        handleHorizontalMediaGesture(translation: translation, phase: phase, feedback: 1) {
-            musicManager.previousTrack()
-        }
-    }
-
-    private func handleHorizontalMediaGesture(
-        translation: CGFloat,
-        phase: NSEvent.Phase,
-        feedback: CGFloat,
-        action: () -> Void
-    ) {
-        guard isHorizontalMediaGestureContext else {
-            resetHorizontalMediaGesture()
-            return
-        }
-        guard phase != .ended else {
-            resetHorizontalMediaGesture()
-            return
-        }
-        guard !horizontalMediaGestureTriggered else { return }
-        guard translation > Defaults[.gestureSensitivity] else { return }
-
-        horizontalMediaGestureTriggered = true
-        triggerHorizontalMediaFeedback(feedback)
-        action()
-
-        if Defaults[.enableHaptics] {
-            haptics.toggle()
-        }
-    }
-
-    private func resetHorizontalMediaGesture() {
-        horizontalMediaGestureTriggered = false
-    }
-
-    private func triggerHorizontalMediaFeedback(_ feedback: CGFloat) {
-        withAnimation(.interactiveSpring(response: 0.18, dampingFraction: 0.62)) {
-            horizontalMediaGestureFeedback = feedback
-            if vm.notchState == .closed {
-                gestureProgress = 2
-            }
-        }
-
-        Task { @MainActor in
-            try? await Task.sleep(for: .milliseconds(140))
-            withAnimation(animationSpring) {
-                horizontalMediaGestureFeedback = .zero
-                if vm.notchState == .closed {
-                    gestureProgress = .zero
-                }
-            }
-        }
-    }
-
-    private var isHorizontalMediaGestureContext: Bool {
-        switch vm.notchState {
-        case .closed:
-            guard !vm.hideOnClosed else { return false }
-
-            if coordinator.shouldShowSneakPeek(on: vm.screenUUID) {
-                return coordinator.sneakPeekState(for: vm.screenUUID).type == .music
-            }
-
-            guard !coordinator.expandingView.show || coordinator.expandingView.type == .music else {
-                return false
-            }
-
-            return coordinator.musicLiveActivityEnabled && (musicManager.isPlaying || !musicManager.isPlayerIdle)
-
-        case .open:
-            if Defaults[.compactMode] {
-                return !musicManager.isPlayerIdle && isHoveringMusicArea
-            }
-            return coordinator.currentView == .home && !musicManager.isPlayerIdle && isHoveringMusicArea
         }
     }
 }

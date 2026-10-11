@@ -11,13 +11,11 @@ import SwiftUI
 struct NotchSettingsView: View {
     @ObservedObject var coordinator = BoringViewCoordinator.shared
 
-    @Default(.gestureSensitivity) var gestureSensitivity
     @Default(.minimumHoverDuration) var minimumHoverDuration
     @Default(.nonNotchHeight) var nonNotchHeight
     @Default(.nonNotchHeightMode) var nonNotchHeightMode
     @Default(.notchHeight) var notchHeight
     @Default(.notchHeightMode) var notchHeightMode
-    @Default(.enableGestures) var enableGestures
     @Default(.openNotchOnHover) var openNotchOnHover
     @Default(.enableOpeningAnimation) var enableOpeningAnimation
     @Default(.animationSpeedMultiplier) var animationSpeedMultiplier
@@ -26,17 +24,11 @@ struct NotchSettingsView: View {
         Form {
             sizingSection
             behaviorSection
-            gesturesSection
             windowSection
         }
         .formStyle(.grouped)
         .accentColor(.effectiveAccent)
         .navigationTitle("Notch")
-        .onChange(of: openNotchOnHover) {
-            if !openNotchOnHover {
-                enableGestures = true
-            }
-        }
     }
 
     private var sizingSection: some View {
@@ -183,48 +175,6 @@ struct NotchSettingsView: View {
         }
     }
 
-    private var gesturesSection: some View {
-        Section {
-            Defaults.Toggle(key: .enableGestures) {
-                Text("Enable gestures")
-            }
-                .disabled(!openNotchOnHover)
-            if enableGestures {
-                Defaults.Toggle(key: .enableHorizontalMediaGestures) {
-                    Text("Change media with horizontal gestures")
-                }
-                Defaults.Toggle(key: .closeGestureEnabled) {
-                    Text("Close gesture")
-                }
-                Slider(value: $gestureSensitivity, in: 100...300, step: 100) {
-                    HStack {
-                        Text("Gesture sensitivity")
-                        Spacer()
-                        Text(
-                            Defaults[.gestureSensitivity] == 100
-                                ? "High" : Defaults[.gestureSensitivity] == 200 ? "Medium" : "Low"
-                        )
-                        .foregroundStyle(.secondary)
-                    }
-                }
-            }
-            Defaults.Toggle(key: .normalizeGestureDirection) {
-                Text("Normalize gesture direction")
-            }
-        } header: {
-            HStack {
-                Text("Gestures")
-                customBadge(text: "Beta")
-            }
-        } footer: {
-            Text(
-                "Two-finger swipe up on notch to close, two-finger swipe down on notch to open when **Open notch on hover** option is disabled"
-            )
-            .multilineTextAlignment(.trailing)
-            .foregroundStyle(.secondary)
-            .font(.caption)
-        }
-    }
 
     private var windowSection: some View {
         Section {
